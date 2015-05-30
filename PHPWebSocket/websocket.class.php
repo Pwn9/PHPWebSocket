@@ -128,10 +128,25 @@ class WebSocket{
         } 
     }
 
-    function wrap($msg=""){ 
-        // THIS CODE DOES NOT SEEM TO BE WORKING
-        return chr(0).$msg.chr(255);
-        
+    function wrap($msg=""){
+    	
+    	// THIS CODE DOES NOT SEEM TO BE WORKING
+    	return chr(0).$msg.chr(255);
+    	
+       	/* 	THIS IS HOW THE BetterPHPWebSocket Does it
+        $b1 = 0x80 | (0x1 & 0x0f);
+        $length = strlen($msg);
+    
+        if($length <= 125)
+            $header = pack('CC', $b1, $length);
+        elseif($length > 125 && $length < 65536)
+            $header = pack('CCn', $b1, 126, $length);
+        elseif($length >= 65536)
+            $header = pack('CCNN', $b1, 127, $length);
+        return $header.$msg;
+        */
+    
+
         /*  THIS CODE WORKS BUT ALSO THROWS MASK ERROR
         $length=strlen($msg);
         $header=chr(0x81).chr($length);
@@ -142,9 +157,31 @@ class WebSocket{
     }
   
     function unwrap($msg=""){ 
-        // THIS CODE DOES NOT SEEM TO BE WORKING
-        return substr($msg,1,strlen($msg)-2); 
-        
+    	
+    	// THIS CODE DOES NOT SEEM TO BE WORKING
+    	return substr($msg,1,strlen($msg)-2);
+       
+    	/* 	THIS IS HOW THE BetterPHPWebSocket Does it
+    	$length = ord($msg[1]) & 127;
+        if($length == 126) {
+            $masks = substr($msg, 4, 4);
+            $data = substr($msg, 8);
+        }
+        elseif($length == 127) {
+            $masks = substr($msg, 10, 4);
+            $data = substr($msg, 14);
+        }
+        else {
+            $masks = substr($msg, 2, 4);
+            $data = substr($msg, 6);
+        }
+        $msg = "";
+        for ($i = 0; $i < strlen($data); ++$i) {
+            $msg .= $data[$i] ^ $masks[$i%4];
+        }
+        return $msg;   
+        */  
+       
         /* THIS CODE WORKS BUT ALSO THROWS MASK ERROR
         $firstMask=     bindec("10000000");
         $secondMask=    bindec("01000000"); //not doing anything with the rsvs since we arent negotiating extensions...

@@ -1,4 +1,12 @@
 <?php
+
+/* 
+ * Found this example somewhere online and it works great for a simple multi-user chat, handshake works great, messaging great.. 
+ * perhaps this should be the new "class" base example 
+ *
+ */
+
+
 $host = '0.0.0.0'; //host
 $port = '7777'; //port
 $null = NULL; //null var

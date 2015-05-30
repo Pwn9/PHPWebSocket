@@ -8,3 +8,7 @@ Eventually the goal is to expand upon the websocket class created here first by 
 standards, and then by making it into an even easier to use framework websocket for PHP without the complexity 
 of setting up something like Ratchet.
 
+
+The "BetterPHPWebSocket" is code I found somewhere, trying to locate attribution for it.. this just feels like 
+better code, handshaking works better, messages work better, it uses JSON and has multi-user already built-in 
+such that, I think moving forward I will be a new class based on this example.
